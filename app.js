@@ -274,3 +274,11 @@ document.addEventListener("DOMContentLoaded", ()=>{
     [...container.children].forEach(el => el.setAttribute("visible","false"));
   }
 });
+document.querySelector("#t0").addEventListener("targetFound", () => {
+  document.getElementById("hudMsg").textContent = "FOUND targetIndex 0";
+  document.querySelector("#test0").setAttribute("visible", "true");
+});
+document.querySelector("#t0").addEventListener("targetLost", () => {
+  document.getElementById("hudMsg").textContent = "LOST targetIndex 0";
+  document.querySelector("#test0").setAttribute("visible", "false");
+});
