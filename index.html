@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Săn tìm mã bay 2022</title>
+  <link rel="stylesheet" href="./style.css" />
+
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+</head>
+<body>
+
+<div id="ui">
+  <div id="start" class="panel">
+    <h2>Săn tìm mã bay 2022</h2>
+    <p>
+      1) Bấm <b>Bắt đầu</b> để bật camera<br>
+      2) Scan <b>ảnh thành phố đúng ngày</b> (trên PC/máy khác/in ra)<br>
+      3) Bấm hotspot để nhặt mảnh mã
+    </p>
+    <button id="btnStart">Bắt đầu</button>
+    <div class="note">* MindAR cần camera nhìn ảnh ở thiết bị khác.</div>
+  </div>
+
+  <div id="hud" class="hud hidden">
+    <div>
+      <div id="hudDay" class="line"></div>
+      <div id="hudMsg" class="line"></div>
+      <div id="hudFound" class="line"></div>
+    </div>
+    <button id="btnSubmit" disabled>Nộp đáp án</button>
+  </div>
+
+  <div id="modal" class="modal hidden">
+    <div class="card">
+      <h3>Nộp đáp án</h3>
+      <div id="modalInfo"></div>
+      <form id="form">
+        <input name="name" placeholder="Họ tên" required />
+        <input name="phone" placeholder="Số điện thoại" required />
+        <input name="email" placeholder="Email" type="email" required />
+        <input name="answer" placeholder="Nhập mã (vd: 2202)" required />
+        <input name="hp" class="hp" tabindex="-1" autocomplete="off" />
+        <button type="submit">Gửi</button>
+        <button type="button" id="btnClose" class="secondary">Đóng</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<a-scene
+  mindar-image="imageTargetSrc: ./targets/targets.mind; autoStart: false;"
+  vr-mode-ui="enabled: false"
+  device-orientation-permission-ui="enabled: false"
+  renderer="colorManagement: true"
+  gltf-model="dracoDecoderPath: https://www.gstatic.com/draco/v1/decoders/;"
+>
+  <a-assets>
+    <img id="hs" src="./assets/hotspot.png" />
+  </a-assets>
+
+  <a-camera
+    position="0 0 0"
+    look-controls="enabled: false"
+    cursor="fuse: false; rayOrigin: mouse;"
+    raycaster="objects: .clickable"
+  ></a-camera>
+
+  <!-- Day 15: targetIndex 0 -->
+  <a-entity id="t0" mindar-image-target="targetIndex: 0">
+    <a-entity id="m0" gltf-model="./assets/city15.glb" visible="false"
+      position="0 -0.2 0" rotation="0 0 0" scale="0.35 0.35 0.35"></a-entity>
+    <a-entity id="hs0"></a-entity>
+  </a-entity>
+
+  <!-- Day 16: targetIndex 1 -->
+  <a-entity id="t1" mindar-image-target="targetIndex: 1">
+    <a-entity id="m1" gltf-model="./assets/city16.glb" visible="false"
+      position="0 -0.2 0" rotation="0 0 0" scale="0.35 0.35 0.35"></a-entity>
+    <a-entity id="hs1"></a-entity>
+  </a-entity>
+
+  <!-- Day 17: targetIndex 2 -->
+  <a-entity id="t2" mindar-image-target="targetIndex: 2">
+    <a-entity id="m2" gltf-model="./assets/city17.glb" visible="false"
+      position="0 -0.2 0" rotation="0 0 0" scale="0.35 0.35 0.35"></a-entity>
+    <a-entity id="hs2"></a-entity>
+  </a-entity>
+
+</a-scene>
+
+<script src="./app.js"></script>
+</body>
+</html>
