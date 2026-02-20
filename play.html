@@ -3,50 +3,47 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Săn tìm mã bay 2022</title>
-
-  <link rel="stylesheet" href="css/app.css?v=1" />
-
-  <!-- Babylon CDN (ổn định + dễ) -->
-  <script defer src="https://cdn.babylonjs.com/babylon.js"></script>
-  <script defer src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
-  <script defer src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
-
-  <!-- App scripts: PHẢI load sau Babylon -->
-  <script defer src="js/scenes.js?v=22"></script>
-  <script defer src="js/babylon-game.js?v=22"></script>
+  <title>Play</title>
+  <link rel="stylesheet" href="css/app.css" />
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 </head>
-
-<body class="babylonBody">
+<body>
   <div class="topbar">
     <a class="link" href="index.html">← Trang chính</a>
     <div class="title" id="sceneTitle">Scene</div>
-    <button class="btn" id="btnHint" type="button">Gợi ý</button>
+    <button class="btn" id="btnHint">Gợi ý</button>
   </div>
 
   <div class="viewerWrap">
-    <canvas id="renderCanvas"></canvas>
+    <model-viewer id="mv"
+      camera-controls
+      interaction-prompt="none"
+      shadow-intensity="0"
+      exposure="1"
+      reveal="interaction"
+      loading="lazy"
+      style="width:100%; height:100%; background:#0b1020;">
+      <!-- Hotspots sẽ được JS bơm vào đây -->
+    </model-viewer>
 
     <div class="hud">
       <div class="label">Mã</div>
       <div id="hudCode" class="hudCode">_ _ _ _</div>
 
       <div class="row gap">
-        <button class="btn" id="btnSubmit" type="button">Submit</button>
-        <button class="btn ghost" id="btnClearScene" type="button">Xóa lựa chọn cảnh</button>
+        <button class="btn" id="btnSubmit">Submit</button>
+        <button class="btn ghost" id="btnClearScene">Xóa lựa chọn cảnh</button>
       </div>
 
       <div id="toast" class="toast"></div>
-
       <div class="progress">
         <div id="bar" class="bar" style="width:0%"></div>
       </div>
-      <div class="muted tiny" id="loadText">Đang tải…</div>
-      <div class="muted tiny">Tip: bấm phím <b>C</b> rồi click vào cảnh để lấy tọa độ đặt hotspot.</div>
+      <div class="muted tiny" id="loadText">Chạm/kéo để bắt đầu tải model…</div>
     </div>
   </div>
 
   <script src="js/scenes.js"></script>
-  <script src="js/babylon-game.js?v=21"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>
