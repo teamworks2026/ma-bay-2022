@@ -4,16 +4,33 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>GLB Test</title>
+  <!-- Nếu CDN có vấn đề: đổi sang ./vendor/model-viewer.min.js -->
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 </head>
 <body style="margin:0">
+  <div id="status" style="position:fixed;left:10px;top:10px;z-index:9;padding:8px 10px;background:#000;color:#fff;border-radius:8px;font:12px system-ui"></div>
+
   <model-viewer
-    src="./scenes/roma.glb"
+    id="mv"
+    src="./scenes/tokyo.glb"
     camera-controls
     auto-rotate
-    shadow-intensity="1"
     exposure="1.2"
-    style="width:100vw;height:100vh;background:#ffffff">
+    style="width:100vw;height:100vh;background:#fff">
   </model-viewer>
+
+  <script>
+    const s = document.getElementById('status');
+    s.textContent = 'model-viewer loaded: ' + (!!customElements.get('model-viewer'));
+
+    const mv = document.getElementById('mv');
+    mv.addEventListener('error', (e) => {
+      console.error(e);
+      s.textContent = 'MODEL ERROR - xem Console (F12)';
+    });
+    mv.addEventListener('load', () => {
+      s.textContent = 'MODEL LOADED OK';
+    });
+  </script>
 </body>
 </html>
