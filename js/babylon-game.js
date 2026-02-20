@@ -5,6 +5,13 @@
   const toastEl = document.getElementById("toast");
   const barEl = document.getElementById("bar");
   const loadTextEl = document.getElementById("loadText");
+  const rootUrl = "./scenes/";
+  const fileName = (sceneCfg && sceneCfg.file) ? sceneCfg.file : "tokyo.glb";
+
+  console.log("CITY =", city);
+  console.log("sceneCfg =", sceneCfg);
+  console.log("Loading =", rootUrl + fileName);
+
 
   const qs = new URLSearchParams(location.search);
   const city = (qs.get("city") || "rome").toLowerCase();
@@ -77,7 +84,11 @@
       barEl.style.width = "0%";
 
       const rootUrl = "./scenes/";
-      const fileName = sceneCfg.file;
+      const fileName = (sceneCfg && sceneCfg.file) ? sceneCfg.file : "tokyo.glb";
+
+      console.log("CITY =", city);
+      console.log("sceneCfg =", sceneCfg);
+      console.log("Loading =", rootUrl + fileName);
 
       // onProgress: cập nhật %
       const onProgress = (evt)=>{
