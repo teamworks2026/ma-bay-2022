@@ -102,9 +102,18 @@
 
       // Fit camera theo bounding
       const meshes = result.meshes.filter(m => m.getTotalVertices && m.getTotalVertices() > 0);
-      if (meshes.length){
-        let min = new BABYLON.Vector3(Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY);
-        let max = new BABYLON.Vector3(Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY);
+      if (meshes.length) {
+      // ✅ frame tự động toàn bộ mesh
+        camera.zoomOn(meshes);
+        camera.radius *= 1.25;
+
+      // ✅ góc nhìn đẹp hơn (tránh nhìn ngang mặt đất)
+        camera.alpha = Math.PI / 2;
+        camera.beta  = 1.15;
+
+      // ✅ chống clip xa/gần
+        camera.minZ = 0.05;
+        camera.maxZ = camera.radius * 50;
 
         for (const m of meshes){
           m.computeWorldMatrix(true);
@@ -133,52 +142,61 @@
     }
   }
 
+  function handleHotspotClick(h, key, btn){
+  const used = getUsedMap();
+  if (used[key]) return toast("Hotspot này bạn lấy rồi.");
+
+  if (h.decoy) return toast("Sai rồi 😅");
+
+  used[key] = true;
+  setUsedMap(used);
+  if (btn) btn.alpha = 0.12;
+
+  const code = getCodeArr();
+  if (code.length >= 4) return toast("Bạn đã đủ 4 số. Bấm Submit!");
+
+  code.push(h.rewardDigit);
+  setCodeArr(code);
+  toast(`✅ Nhận số: ${h.rewardDigit}`);
+}
+
   // ===== Build hotspots
   function buildHotspots(){
-    const used = getUsedMap();
+  const used = getUsedMap();
 
-    sceneCfg.hotspots.forEach(h=>{
-      const key = `${city}:${h.id}`;
+  sceneCfg.hotspots.forEach(h=>{
+    const key = `${city}:${h.id}`;
 
-      // điểm hotspot trong 3D (sphere nhỏ)
-      const s = BABYLON.MeshBuilder.CreateSphere(`hs_${h.id}`, {diameter: 0.6}, scene);
-      s.position = new BABYLON.Vector3(h.pos[0], h.pos[1], h.pos[2]);
-      s.material = hsMat;
-      s.isPickable = true;
+    // sphere nhỏ làm điểm hotspot (luôn nhìn thấy)
+    const s = BABYLON.MeshBuilder.CreateSphere(`hs_${h.id}`, {diameter: 0.9}, scene);
+    s.position = new BABYLON.Vector3(h.pos[0], h.pos[1], h.pos[2]);
+    s.material = hsMat;
+    s.isPickable = true;
 
-      // Nút GUI bám theo sphere
-      const btn = BABYLON.GUI.Button.CreateSimpleButton(`btn_${h.id}`, "");
-      btn.width = "28px";
-      btn.height = "28px";
-      btn.thickness = 0;
-      btn.background = "rgba(255,122,0,0.18)";
-      btn.cornerRadius = 999;
-      btn.alpha = used[key] ? 0.12 : 1;
+    // ✅ click trực tiếp vào sphere cũng hoạt động (dù GUI có lỗi)
+    s.actionManager = new BABYLON.ActionManager(scene);
+    s.actionManager.registerAction(new BABYLON.ExecuteCodeAction(
+      BABYLON.ActionManager.OnPickTrigger,
+      ()=> handleHotspotClick(h, key, btn)
+    ));
 
-      btn.linkWithMesh(s);
-      btn.onPointerClickObservable.add(()=>{
-        if (used[key]) return toast("Hotspot này bạn lấy rồi.");
+    // GUI button bám theo sphere
+    const btn = BABYLON.GUI.Button.CreateSimpleButton(`btn_${h.id}`, "");
+    btn.width = "28px";
+    btn.height = "28px";
+    btn.thickness = 0;
+    btn.background = "rgba(255,122,0,0.18)";
+    btn.cornerRadius = 999;
+    btn.alpha = used[key] ? 0.12 : 1;
 
-        if (h.decoy){
-          toast("Sai rồi 😅");
-          return;
-        }
+    // ✅ QUAN TRỌNG: addControl trước rồi mới linkWithMesh (fix root level)
+    ui.addControl(btn);
+    btn.linkWithMesh(s);
+    btn.linkOffsetY = -10;
 
-        used[key] = true;
-        setUsedMap(used);
-        btn.alpha = 0.12;
-
-        const code = getCodeArr();
-        if (code.length >= 4) return toast("Bạn đã đủ 4 số. Bấm Submit!");
-
-        code.push(h.rewardDigit);
-        setCodeArr(code);
-        toast(`✅ Nhận số: ${h.rewardDigit}`);
-      });
-
-      ui.addControl(btn);
-    });
-  }
+    btn.onPointerClickObservable.add(()=> handleHotspotClick(h, key, btn));
+  });
+}
 
   // ===== Buttons
   document.getElementById("btnHint").onclick = ()=> alert(sceneCfg.hint);
