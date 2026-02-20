@@ -5,9 +5,14 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Play</title>
   <link rel="stylesheet" href="css/app.css" />
-  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
+  <!-- Babylon CDN (ổn định + dễ) -->
+  <script src="https://cdn.babylonjs.com/babylon.js"></script>
+  <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+  <script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
 </head>
-<body>
+
+<body class="babylonBody">
   <div class="topbar">
     <a class="link" href="index.html">← Trang chính</a>
     <div class="title" id="sceneTitle">Scene</div>
@@ -15,16 +20,7 @@
   </div>
 
   <div class="viewerWrap">
-    <model-viewer id="mv"
-      camera-controls
-      interaction-prompt="none"
-      shadow-intensity="0"
-      exposure="1"
-      reveal=""
-      loading="lazy"
-      style="width:100%; height:100%; background:#0b1020;">
-      <!-- Hotspots sẽ được JS bơm vào đây -->
-    </model-viewer>
+    <canvas id="renderCanvas"></canvas>
 
     <div class="hud">
       <div class="label">Mã</div>
@@ -36,24 +32,16 @@
       </div>
 
       <div id="toast" class="toast"></div>
+
       <div class="progress">
         <div id="bar" class="bar" style="width:0%"></div>
       </div>
-      <div class="muted tiny" id="loadText">Chạm/kéo để bắt đầu tải model…</div>
+      <div class="muted tiny" id="loadText">Đang tải…</div>
+      <div class="muted tiny">Tip: bấm phím <b>C</b> rồi click vào cảnh để lấy tọa độ đặt hotspot.</div>
     </div>
   </div>
 
   <script src="js/scenes.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/babylon-game.js"></script>
 </body>
 </html>
-
-<model-viewer
-  id="mv"
-  src="scenes/tokyo.glb"
-  camera-controls
-  auto-rotate
-  shadow-intensity="0"
-  exposure="1.2"
-  style="width:100%; height:100%; background:#fff;">
-</model-viewer>
