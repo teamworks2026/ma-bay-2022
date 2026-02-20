@@ -1,10 +1,17 @@
-(function(){
+(function () {
   const canvas = document.getElementById("renderCanvas");
   const titleEl = document.getElementById("sceneTitle");
   const hudCodeEl = document.getElementById("hudCode");
   const toastEl = document.getElementById("toast");
   const barEl = document.getElementById("bar");
   const loadTextEl = document.getElementById("loadText");
+
+  // ✅ 1) Lấy city + sceneCfg TRƯỚC
+  const qs = new URLSearchParams(location.search);
+  const city = (qs.get("city") || "rome").toLowerCase();
+  const sceneCfg = SCENES[city] || SCENES.rome;
+
+  // ✅ 2) Rồi mới build đường dẫn file
   const rootUrl = "./scenes/";
   const fileName = (sceneCfg && sceneCfg.file) ? sceneCfg.file : "tokyo.glb";
 
@@ -12,12 +19,9 @@
   console.log("sceneCfg =", sceneCfg);
   console.log("Loading =", rootUrl + fileName);
 
-
-  const qs = new URLSearchParams(location.search);
-  const city = (qs.get("city") || "rome").toLowerCase();
-  const sceneCfg = SCENES[city] || SCENES.rome;
-
   titleEl.textContent = sceneCfg.title;
+
+  // ... phần còn lại giữ nguyên
 
   // ===== localStorage helpers
   function toast(msg, ms=1400){
