@@ -19,9 +19,9 @@ const SCENES = {
     file: "tokyo.glb",
     hint: "Gợi ý: tìm các góc có biển hiệu / đèn neon / nóc nhà.",
     hotspots: [
-      { id:"hs1", pos:[ 0, 2, 0], rewardDigit:"2" },
-      { id:"hs2", pos:[ 2, 2, 0], decoy:true },
-      { id:"hs3", pos:[-2, 2, 0], decoy:true },
+      { id:"hs1", pos:[ 611.2576536639622, 740.9855494495359, 4889.976327830442], rewardDigit:"2" },
+      { id:"hs2", pos:[ -19.240683832032346, 693.9448074280065, -2291.394989197963], decoy:true },
+      { id:"hs3", pos:[-4323.566197579423, 994.2742630597909, -546.1139237456541], decoy:true },
       { id:"hs4", pos:[ 0, 1, 2], decoy:true },
     ]
   },
