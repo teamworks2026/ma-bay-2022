@@ -60,3 +60,10 @@ h1{margin:8px 0 6px}
   display:block;width:8px;height:8px;border-radius:999px;background:#ff7a00;
   margin:0 auto
 }
+.babylonBody{margin:0; background:#0b1020; color:#eaf0ff;}
+#renderCanvas{
+  width:100%;
+  height:100%;
+  display:block;
+  touch-action:none; /* quan trọng để kéo xoay trên mobile */
+}
