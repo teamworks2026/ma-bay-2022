@@ -1,4 +1,5 @@
 (function () {
+  const mix = (a, b, t) => a + (b - a) * t;
   const canvas = document.getElementById("renderCanvas");
   const titleEl = document.getElementById("sceneTitle");
   const hudCodeEl = document.getElementById("hudCode");
@@ -45,6 +46,11 @@
   );
   camera.attachControl(canvas, true);
   camera.wheelPrecision = 50;
+  canvas.style.touchAction = "none";
+  camera.wheelPrecision = 20;     // zoom bằng wheel dễ hơn
+  camera.pinchPrecision = 200;    // zoom trên mobile
+  camera.minZ = 0.05;
+  camera.maxZ = 100000;
 
   const light = new BABYLON.HemisphericLight("h", new BABYLON.Vector3(0,1,0), scene);
   light.intensity = 1.0;
@@ -101,6 +107,7 @@
       const result = await BABYLON.SceneLoader.ImportMeshAsync(
         "", rootUrl, fileName, scene, onProgress
       );
+      result.meshes.forEach(m => m.isPickable = true);
 
       // Fit camera theo bounding
       const meshes = result.meshes.filter(m => m.getTotalVertices && m.getTotalVertices() > 0);
