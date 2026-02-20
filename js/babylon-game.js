@@ -55,7 +55,9 @@
   // Material cho dấu hotspot (nhỏ, khó thấy)
   const hsMat = new BABYLON.StandardMaterial("hsMat", scene);
   hsMat.emissiveColor = new BABYLON.Color3(1, 0.48, 0); // cam
-  hsMat.alpha = 0.55;
+  hsMat.disableLighting = true;
+  hsMat.alpha = 0.95;
+  hsMat.zOffset = -2;
 
   // ===== Tool lấy tọa độ: bấm C để bật/tắt, rồi click vào cảnh để log toạ độ
   let capture = false;
@@ -164,38 +166,49 @@
   function buildHotspots(){
   const used = getUsedMap();
 
+  // ✅ Tự scale hotspot theo camera để không bị quá nhỏ
+  const markerSize = Math.max(1.5, camera.radius * 0.03);
+  const liftY = markerSize * 0.9;
+  const px = Math.round(markerSize * 12);
+
+  console.log("HOTSPOTS COUNT:", sceneCfg.hotspots.length, "markerSize:", markerSize);
+
   sceneCfg.hotspots.forEach(h=>{
     const key = `${city}:${h.id}`;
 
-    // sphere nhỏ làm điểm hotspot (luôn nhìn thấy)
-    const s = BABYLON.MeshBuilder.CreateSphere(`hs_${h.id}`, {diameter: 0.9}, scene);
-    s.position = new BABYLON.Vector3(h.pos[0], h.pos[1], h.pos[2]);
+    // ✅ Marker 3D (luôn thấy vì đủ lớn + được nâng lên)
+    const s = BABYLON.MeshBuilder.CreateSphere(`hs_${h.id}`, {diameter: markerSize}, scene);
+    s.position = new BABYLON.Vector3(h.pos[0], h.pos[1] + liftY, h.pos[2]);
     s.material = hsMat;
     s.isPickable = true;
 
-    // ✅ click trực tiếp vào sphere cũng hoạt động (dù GUI có lỗi)
+    // Click trực tiếp marker 3D
     s.actionManager = new BABYLON.ActionManager(scene);
     s.actionManager.registerAction(new BABYLON.ExecuteCodeAction(
       BABYLON.ActionManager.OnPickTrigger,
-      ()=> handleHotspotClick(h, key, btn)
+      ()=> handleHotspotClick(h, key, null)
     ));
 
-    // GUI button bám theo sphere
-    const btn = BABYLON.GUI.Button.CreateSimpleButton(`btn_${h.id}`, "");
-    btn.width = "28px";
-    btn.height = "28px";
+    // ✅ Marker GUI bám theo điểm 3D + hiện chữ hs1/hs2 để bạn test
+    const btn = BABYLON.GUI.Button.CreateSimpleButton(`btn_${h.id}`, h.id);
+    btn.width = `${px}px`;
+    btn.height = `${px}px`;
     btn.thickness = 0;
-    btn.background = "rgba(255,122,0,0.18)";
+    btn.color = "#ffb36b";
+    btn.fontSize = Math.max(12, Math.round(px * 0.35));
+    btn.background = "rgba(255,122,0,0.22)";
     btn.cornerRadius = 999;
-    btn.alpha = used[key] ? 0.12 : 1;
+    btn.alpha = used[key] ? 0.18 : 1;
 
-    // ✅ QUAN TRỌNG: addControl trước rồi mới linkWithMesh (fix root level)
-    ui.addControl(btn);
-    btn.linkWithMesh(s);
+    ui.addControl(btn);        // ✅ add trước
+    btn.linkWithMesh(s);       // ✅ rồi mới link
     btn.linkOffsetY = -10;
 
     btn.onPointerClickObservable.add(()=> handleHotspotClick(h, key, btn));
   });
+
+  // ✅ log kiểm tra đã tạo đủ chưa
+  console.log("HOTSPOTS CREATED:", scene.meshes.filter(m=>m.name.startsWith("hs_")).length);
 }
 
   // ===== Buttons
