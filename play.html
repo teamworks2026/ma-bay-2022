@@ -3,20 +3,25 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Play</title>
-  <link rel="stylesheet" href="css/app.css" />
+  <title>Săn tìm mã bay 2022</title>
+
+  <link rel="stylesheet" href="css/app.css?v=1" />
 
   <!-- Babylon CDN (ổn định + dễ) -->
-  <script src="https://cdn.babylonjs.com/babylon.js"></script>
-  <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
-  <script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
+  <script defer src="https://cdn.babylonjs.com/babylon.js"></script>
+  <script defer src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+  <script defer src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
+
+  <!-- App scripts: PHẢI load sau Babylon -->
+  <script defer src="js/scenes.js?v=22"></script>
+  <script defer src="js/babylon-game.js?v=22"></script>
 </head>
 
 <body class="babylonBody">
   <div class="topbar">
     <a class="link" href="index.html">← Trang chính</a>
     <div class="title" id="sceneTitle">Scene</div>
-    <button class="btn" id="btnHint">Gợi ý</button>
+    <button class="btn" id="btnHint" type="button">Gợi ý</button>
   </div>
 
   <div class="viewerWrap">
@@ -27,8 +32,8 @@
       <div id="hudCode" class="hudCode">_ _ _ _</div>
 
       <div class="row gap">
-        <button class="btn" id="btnSubmit">Submit</button>
-        <button class="btn ghost" id="btnClearScene">Xóa lựa chọn cảnh</button>
+        <button class="btn" id="btnSubmit" type="button">Submit</button>
+        <button class="btn ghost" id="btnClearScene" type="button">Xóa lựa chọn cảnh</button>
       </div>
 
       <div id="toast" class="toast"></div>
@@ -41,7 +46,10 @@
     </div>
   </div>
 
-  <script src="js/scenes.js"></script>
-  <script src="js/babylon-game.js?v=22"></script>
+  <!--
+    Ghi chú:
+    - Dùng "defer" ở head để đảm bảo DOM + Babylon + scenes.js load xong trước khi game chạy.
+    - Mỗi lần sửa JS/CSS: tăng số ?v= để khỏi cache GitHub Pages.
+  -->
 </body>
 </html>
