@@ -17,12 +17,12 @@
   // ---- URL + scene config
   const qs = new URLSearchParams(location.search);
   const city = (qs.get("city") || "rome").toLowerCase();
-  const sceneCfg = (window.SCENES && (SCENES[city] || SCENES.rome)) || null;
+  if (typeof SCENES === "undefined") {
+  alert("Không tìm thấy SCENES. Kiểm tra play.html đã load js/scenes.js chưa (và phải load TRƯỚC babylon-game.js).");
+  return;
+}
 
-  if (!sceneCfg) {
-    alert("Không tìm thấy SCENES. Kiểm tra play.html đã load js/scenes.js chưa.");
-    return;
-  }
+const sceneCfg = SCENES[city] || SCENES.rome;
 
   const rootUrl = "./scenes/";
   const fileName = sceneCfg.file || "tokyo.glb";
